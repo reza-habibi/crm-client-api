@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { insertUser, getUserByEmail } = require("../model/user/userModel");
+const { insertUser, getUserByEmail } = require("../model/user/userModel.js");
 const { hashPassword, comparePassword } = require("../helper/bcryptHelper.js");
+const { CreateAccessJWT, CreateRefreshJWT } = require("../helper/jwtHelper.js");
 router.all("/", (req, res, next) => {
   //   res.json({ message: "return from user router" });
   next();
@@ -55,10 +56,22 @@ router.post("/login", async (req, res) => {
     });
 
   const result = await comparePassword(password, passFromDb);
-  console.log(result);
+
+  if (!result) {
+    return res.json({
+      status: "error",
+      message: "ایمیل یا رمز عبور اشتباه است !",
+    });
+  }
+
+  const accessJWT = await CreateAccessJWT(user.email);
+  const refreshJWT = await CreateRefreshJWT(user.email);
+
   res.json({
     status: "success",
     message: "با موفقیت وارد شد",
+    accessJWT,
+    refreshJWT,
   });
 });
 
