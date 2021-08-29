@@ -4,15 +4,18 @@
   "description": "Api for crm client side app",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon --watch back --exec node --experimental-modules app.js"
+    "start": "nodemon app.js"
   },
   "author": "RezHabibi",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "helmet": "^4.6.0",
+    "mongoose": "^6.0.2",
     "morgan": "^1.10.0"
   },
   "devDependencies": {

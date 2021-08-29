@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
@@ -11,8 +12,27 @@ app.use(helmet());
 // handle CORS error
 app.use(cors());
 
-// Logger
-app.use(morgan("tiny"));
+//MongoDB Connection Setup
+const mongoose = require("mongoose");
+
+mongoose.connect(process.env.MONGO_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+if (process.env.NODE_ENV !== "production") {
+  const mDb = mongoose.connection;
+  mDb.on("open", () => {
+    console.log("MongoDB is connected");
+  });
+
+  mDb.on("error", (error) => {
+    console.log(error);
+  });
+
+  //Logger
+  app.use(morgan("tiny"));
+}
 
 // Set Body Parser
 
@@ -41,7 +61,7 @@ app.use((req, res, next) => {
 });
 
 app.use((error, req, res, next) => {
-    handleError(error , res)
+  handleError(error, res);
 });
 
 app.listen(port, () => {
