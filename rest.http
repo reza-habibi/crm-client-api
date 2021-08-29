@@ -1,0 +1,23 @@
+###user signup endpoint
+POST http://localhost:4030/v1/user
+Content-Type: application/json
+
+{
+    "name":"hussien alikhani",
+    "phone":"09354535833",
+    "email":"e1@e.com",
+    "password":"secret123",
+    "company":"farazin",
+    "address":"some address in tehran"
+}
+
+###user signin endpoint
+POST http://localhost:4030/v1/user/login
+Content-Type: application/json
+
+{
+
+    "email":"e1@e.com1",
+    "password":"secret1234"
+
+}

@@ -7,7 +7,7 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 
 // API security
-app.use(helmet());
+// app.use(helmet());
 
 // handle CORS error
 app.use(cors());
@@ -53,7 +53,6 @@ app.use("/v1/ticket", ticketRouter);
 
 // Error handler
 const handleError = require("./src/utils/errorHandler.js");
-
 app.use((req, res, next) => {
   const error = new Error("هیچ دیتایی یافت نشد");
   error.status = 404;
