@@ -21,3 +21,11 @@ Content-Type: application/json
     "password":"secret123"
 
 }
+
+###user signin endpoint
+GET  http://localhost:4030/v1/user
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImUxQGUuY29tIiwiaWF0IjoxNjMwMzE4Nzc1LCJleHAiOjE2MzA0MDUxNzV9.huHAGhqgvac1_qTDgWpHND5fgIBWfaH-j5aluH-x0rQ
+
+### Get refreshed token
+GET http://localhost:4030/v1/tokens
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImUxQGUuY29tIiwiaWF0IjoxNjMwMzE4Nzc1LCJleHAiOjE2MzI5MTA3NzV9.UDzHjG8tXrLGXODlQOdP7U24FaMJDQ3k7ridI2dEx5k

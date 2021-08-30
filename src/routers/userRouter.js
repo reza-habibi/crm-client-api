@@ -1,15 +1,32 @@
 const express = require("express");
 const router = express.Router();
-const { insertUser, getUserByEmail } = require("../model/user/userModel.js");
+const {
+  insertUser,
+  getUserByEmail,
+  getUserById,
+} = require("../model/user/userModel.js");
 const { hashPassword, comparePassword } = require("../helper/bcryptHelper.js");
 const { CreateAccessJWT, CreateRefreshJWT } = require("../helper/jwtHelper.js");
+const {
+  authorizationMiddleware,
+  userAuthorization,
+} = require("../middleware/authorizationMiddleware");
 router.all("/", (req, res, next) => {
   //   res.json({ message: "return from user router" });
   next();
 });
 
-// Create new user route
+// user profile
+router.get("/", userAuthorization, async (req, res) => {
+  const _id = req.userId;
 
+  const userProf = await getUserById(_id);
+  console.log(userProf);
+
+  res.json({ user: req.userId });
+});
+
+// Create new user route
 router.post("/", async (req, res) => {
   const { name, company, address, phone, email, password } = req.body;
   try {
@@ -64,8 +81,8 @@ router.post("/login", async (req, res) => {
     });
   }
 
-  const accessJWT = await CreateAccessJWT(user.email);
-  const refreshJWT = await CreateRefreshJWT(user.email);
+  const accessJWT = await CreateAccessJWT(user.email, `${user._id}`);
+  const refreshJWT = await CreateRefreshJWT(user.email, user._id);
 
   res.json({
     status: "success",

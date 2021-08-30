@@ -1,7 +1,5 @@
 const redis = require("redis");
-const client = redis.createClient(
-  process.env.REDIS_URL || "redis://127.0.0.1:6039"
-);
+const client = redis.createClient(process.env.REDIS_URL);
 
 client.on("error", function (error) {
   console.error(error);
@@ -35,9 +33,9 @@ const getJWT = (key) => {
 
 const deleteJWT = (key) => {
   try {
-    client.del(key);
+    return Promise.resolve(client.del(key));
   } catch (error) {
-    console.log(error);
+    return Promise.reject(error);
   }
 };
 module.exports = {
