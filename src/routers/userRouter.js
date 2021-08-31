@@ -9,6 +9,7 @@ const { hashPassword, comparePassword } = require("../helper/bcryptHelper.js");
 const { CreateAccessJWT, CreateRefreshJWT } = require("../helper/jwtHelper.js");
 const { userAuthorization } = require("../middleware/authorizationMiddleware");
 const { setResetPassPin } = require("../model/resetPin/ResetPinModel.js");
+const { emailProcessor } = require("../helper/emailHelper.js");
 router.all("/", (req, res, next) => {
   //   res.json({ message: "return from user router" });
   next();
@@ -96,7 +97,20 @@ router.post("/reset-password", async (req, res) => {
 
   if (user && user._id) {
     const setPin = await setResetPassPin(email);
-    return res.json(setPin);
+    const result = await emailProcessor(email, setPin.pin);
+
+    if (result && result.messageId) {
+      return res.json({
+        status: "success",
+        message:
+          "اگر ایمیل در پایگاه داده ما موجود باشد ، رمز بازیابی کلمه عبور به زودی برای شما ارسال می شود",
+      });
+    }
+    return res.json({
+      status: "error",
+      message:
+        "در حال حاضر امکان انجام درخواست شما میسر نمی باشد ، لطفاً بعداً تلاش نمایید.",
+    });
   }
 
   res.json({
