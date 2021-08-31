@@ -6,6 +6,17 @@
   "scripts": {
     "start": "nodemon app.js"
   },
+  "nodemonConfig": {
+    "verbose": true,
+    "ignore": [
+      "*.test.js",
+      "fixtures/*"
+    ],
+    "execMap": {
+      "rb": "ruby",
+      "pde": "processing --sketch={{pwd}} --run"
+    }
+  },
   "author": "RezHabibi",
   "license": "ISC",
   "dependencies": {
@@ -19,8 +30,5 @@
     "mongoose": "^6.0.2",
     "morgan": "^1.10.0",
     "redis": "^3.1.2"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.12"
   }
 }
