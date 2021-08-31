@@ -4,11 +4,16 @@ const {
   insertUser,
   getUserByEmail,
   getUserById,
+  updatePassword,
 } = require("../model/user/userModel.js");
 const { hashPassword, comparePassword } = require("../helper/bcryptHelper.js");
 const { CreateAccessJWT, CreateRefreshJWT } = require("../helper/jwtHelper.js");
 const { userAuthorization } = require("../middleware/authorizationMiddleware");
-const { setResetPassPin } = require("../model/resetPin/ResetPinModel.js");
+const {
+  setResetPassPin,
+  getPinByEmailPin,
+  deletePin,
+} = require("../model/resetPin/ResetPinModel.js");
 const { emailProcessor } = require("../helper/emailHelper.js");
 router.all("/", (req, res, next) => {
   //   res.json({ message: "return from user router" });
@@ -97,19 +102,16 @@ router.post("/reset-password", async (req, res) => {
 
   if (user && user._id) {
     const setPin = await setResetPassPin(email);
-    const result = await emailProcessor(email, setPin.pin);
+    await emailProcessor({
+      email,
+      pin: setPin.pin,
+      type: "request_new_password",
+    });
 
-    if (result && result.messageId) {
-      return res.json({
-        status: "success",
-        message:
-          "اگر ایمیل در پایگاه داده ما موجود باشد ، رمز بازیابی کلمه عبور به زودی برای شما ارسال می شود",
-      });
-    }
     return res.json({
-      status: "error",
+      status: "success",
       message:
-        "در حال حاضر امکان انجام درخواست شما میسر نمی باشد ، لطفاً بعداً تلاش نمایید.",
+        "اگر ایمیل در پایگاه داده ما موجود باشد ، رمز بازیابی کلمه عبور به زودی برای شما ارسال می شود",
     });
   }
 
@@ -117,6 +119,44 @@ router.post("/reset-password", async (req, res) => {
     status: "error",
     message:
       "اگر ایمیل در پایگاه داده ما موجود باشد ، رمز بازیابی کلمه عبور به زودی برای شما ارسال می شود",
+  });
+});
+
+router.patch("/reset-password", async (req, res) => {
+  const { email, pin, newPassword } = req.body;
+  const getPin = await getPinByEmailPin(email, pin);
+  if (getPin?._id) {
+    const dbDate = getPin.addedAt;
+    const expiresIn = 1;
+
+    let expDate = dbDate.setDate(dbDate.getDate() + expiresIn);
+
+    const today = new Date();
+
+    if (today > expDate) {
+      return res.json({
+        status: "error",
+        message: "رمز نامعتبر یا منقضی شده است",
+      });
+    }
+  }
+  const hashedPass = await hashPassword(newPassword);
+
+  const user = await updatePassword(email, hashedPass);
+
+  if (user._id) {
+    await emailProcessor({ email, type: "update_password" });
+    await deletePin(email, pin);
+    return res.json({
+      status: "success",
+      message: "کلمه عبور شما به روز رسانی شد",
+    });
+  }
+
+  res.json({
+    status: "error",
+    message:
+      "در حال حاضر امکان به روز رسانی میسر نیست ، لطفاً بعداً تلاس نمایید",
   });
 });
 

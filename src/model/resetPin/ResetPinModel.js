@@ -17,6 +17,36 @@ const setResetPassPin = async (email) => {
   });
 };
 
+const getPinByEmailPin = (email, pin) => {
+  return new Promise((resolve, reject) => {
+    try {
+      ResetPass.findOne({ email, pin }, (error, data) => {
+        if (error) {
+          resolve(false);
+        } else {
+          resolve(data);
+        }
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+const deletePin = (email, pin) => {
+  try {
+    ResetPass.findOneAndDelete({ email, pin }, (error, data) => {
+      if (error) {
+        console.log(error);
+      }
+    });
+  } catch (error) {
+    reject(error);
+  }
+};
+
 module.exports = {
   setResetPassPin,
+  getPinByEmailPin,
+  deletePin,
 };

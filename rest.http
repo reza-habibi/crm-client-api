@@ -18,7 +18,7 @@ Content-Type: application/json
 {
 
     "email":"e1@e.com",
-    "password":"secret123"
+    "password":"Password1"
 
 }
 
@@ -30,10 +30,21 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImUxQGUuY29tIiwi
 GET http://localhost:4030/v1/tokens
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImUxQGUuY29tIiwiaWF0IjoxNjMwMzE4Nzc1LCJleHAiOjE2MzI5MTA3NzV9.UDzHjG8tXrLGXODlQOdP7U24FaMJDQ3k7ridI2dEx5k
 
-###user signin endpoint
+###user reset passsword request endpoint
 POST http://localhost:4030/v1/user/reset-password
 Content-Type: application/json
 
 {
     "email":"e1@e.com"
+}
+
+
+###Update new password endpoint
+PATCH  http://localhost:4030/v1/user/reset-password
+Content-Type: application/json
+
+{
+    "email":"e1@e.com",
+    "pin":"2645994",
+    "newPassword":"Password2"
 }
