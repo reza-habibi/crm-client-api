@@ -18,7 +18,7 @@ Content-Type: application/json
 {
 
     "email":"e1@e.com",
-    "password":"Password1"
+    "password":"Password2"
 
 }
 
@@ -45,6 +45,10 @@ Content-Type: application/json
 
 {
     "email":"e1@e.com",
-    "pin":"2645994",
+    "pin":"4101111",
     "newPassword":"Password2"
 }
+
+### Get refreshed token
+DELETE  http://localhost:4030/v1/user/logout
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImUxQGUuY29tIiwiaWF0IjoxNjMwNDcwMjgzLCJleHAiOjE2MzA0NzExODN9.S4_iMX4b4fLA8vOMLMCo4fqELWQZfmluhVLT9wPbUZs

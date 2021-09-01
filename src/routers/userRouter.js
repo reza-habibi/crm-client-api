@@ -5,6 +5,7 @@ const {
   getUserByEmail,
   getUserById,
   updatePassword,
+  storeUserRefreshJWT,
 } = require("../model/user/userModel.js");
 const { hashPassword, comparePassword } = require("../helper/bcryptHelper.js");
 const { CreateAccessJWT, CreateRefreshJWT } = require("../helper/jwtHelper.js");
@@ -15,6 +16,11 @@ const {
   deletePin,
 } = require("../model/resetPin/ResetPinModel.js");
 const { emailProcessor } = require("../helper/emailHelper.js");
+const {
+  resetPassReqValidation,
+  updatePassValidation,
+} = require("../middleware/formValidationMiddleware.js");
+const { deleteJWT } = require("../helper/redisHelper.js");
 router.all("/", (req, res, next) => {
   //   res.json({ message: "return from user router" });
   next();
@@ -96,7 +102,7 @@ router.post("/login", async (req, res) => {
   });
 });
 
-router.post("/reset-password", async (req, res) => {
+router.post("/reset-password", resetPassReqValidation, async (req, res) => {
   const { email } = req.body;
   const user = await getUserByEmail(email);
 
@@ -122,7 +128,7 @@ router.post("/reset-password", async (req, res) => {
   });
 });
 
-router.patch("/reset-password", async (req, res) => {
+router.patch("/reset-password", updatePassValidation, async (req, res) => {
   const { email, pin, newPassword } = req.body;
   const getPin = await getPinByEmailPin(email, pin);
   if (getPin?._id) {
@@ -158,6 +164,16 @@ router.patch("/reset-password", async (req, res) => {
     message:
       "در حال حاضر امکان به روز رسانی میسر نیست ، لطفاً بعداً تلاس نمایید",
   });
+});
+
+router.delete("/logout", userAuthorization, async (req, res) => {
+  const { authorization } = req.headers;
+  const _id = req.userId;
+
+  deleteJWT(authorization);
+  const result =await storeUserRefreshJWT(_id, "");
+
+  res.json({ user: req.userId });
 });
 
 module.exports = router;
