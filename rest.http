@@ -24,7 +24,7 @@ Content-Type: application/json
 
 ###user signin endpoint
 GET  http://localhost:4030/v1/user
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImUxQGUuY29tIiwiaWF0IjoxNjMwMzE4Nzc1LCJleHAiOjE2MzA0MDUxNzV9.huHAGhqgvac1_qTDgWpHND5fgIBWfaH-j5aluH-x0rQ
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImUxQGUuY29tIiwiaWF0IjoxNjMwNzM1MDg1LCJleHAiOjE2MzA3MzU5ODV9.GxhxLujthq7k-oAPPdpJvszzDxq4Gxenb6DGb1YEA5E
 
 ### Get refreshed token
 GET http://localhost:4030/v1/tokens
@@ -52,3 +52,13 @@ Content-Type: application/json
 ### Get refreshed token
 DELETE  http://localhost:4030/v1/user/logout
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImUxQGUuY29tIiwiaWF0IjoxNjMwNDcwMjgzLCJleHAiOjE2MzA0NzExODN9.S4_iMX4b4fLA8vOMLMCo4fqELWQZfmluhVLT9wPbUZs
+
+### Send Ticket and save to db 
+POST http://localhost:4030/v1/ticket
+Content-Type: application/json
+
+{
+    "subject":"مشکل در ارتباط با سرور",
+    "sender":"rezbi",
+    "message":"از دیشب که مث هر شب ستاره اومد به خوابم سرور دیگه وصل نمیشه "
+}
