@@ -1,5 +1,6 @@
 const express = require("express");
-const { insertTicket } = require("../model/ticket/TicketModel");
+const { userAuthorization } = require("../middleware/authorizationMiddleware");
+const { insertTicket, getTickets } = require("../model/ticket/TicketModel");
 
 const router = express.Router();
 
@@ -9,11 +10,11 @@ router.all("/", (req, res, next) => {
   next();
 });
 
-router.post("/", async (req, res) => {
+router.post("/", userAuthorization, async (req, res) => {
   try {
     const { subject, sender, message } = req.body;
     const ticketObj = {
-      clientId: "612e08518aa5674ee29d7b55",
+      clientId: req.userId,
       subject,
       conversations: [
         {
@@ -26,6 +27,27 @@ router.post("/", async (req, res) => {
     const result = await insertTicket(ticketObj);
     if (result._id) {
       return res.json({ status: "success", message: "تیکت جدیدی ایجاد شد" });
+    }
+
+    res.json({
+      status: "error",
+      message: "امکان ایجاد کردن تیکت نمی باشد ، لطفا بعداً تلاش نمایید.",
+    });
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: error.message,
+    });
+  }
+});
+
+router.get("/", userAuthorization, async (req, res) => {
+  try {
+    const userId = req.userId;
+
+    const result = await getTickets(userId);
+    if (result.length) {
+      return res.json({ status: "success", result });
     }
 
     res.json({

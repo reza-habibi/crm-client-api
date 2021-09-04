@@ -56,7 +56,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImUxQGUuY29tIiwi
 ### Send Ticket and save to db 
 POST http://localhost:4030/v1/ticket
 Content-Type: application/json
-
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImUxQGUuY29tIiwiaWF0IjoxNjMwNzM2NjYzLCJleHAiOjE2MzA3Mzc1NjN9.Z_hkyVs-F8E4a5s3sdWpECaAJoqJGrPTtwgeiOMZpYk
 {
     "subject":"مشکل در ارتباط با سرور",
     "sender":"rezbi",
