@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const TicketSchema = new Schema({
-  clientID: {
+  clientId: {
     type: Schema.Types.ObjectId,
   },
   openAt: {
