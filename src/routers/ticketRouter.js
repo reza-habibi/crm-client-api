@@ -6,6 +6,7 @@ const {
   getTicketById,
   updateClientReply,
   updateStatusClose,
+  deleteTicket,
 } = require("../model/ticket/TicketModel");
 
 const router = express.Router();
@@ -120,6 +121,31 @@ router.patch("/close-ticket/:_id", userAuthorization, async (req, res) => {
       status: "error",
       message:
         "در حال حاضر امکان به روزرسانی وجود ندارد ، لطفاً بعداً تلاش نمایید",
+    });
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: error.message,
+    });
+  }
+});
+
+router.delete("/:_id", userAuthorization, async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const clientId = req.userId;
+
+    const result = await deleteTicket({ _id, clientId });
+    if (result._id) {
+      return res.json({
+        status: "success",
+        message: "تیکت با موفقیت حذف گردید.",
+      });
+    }
+    return res.json({
+      status: "error",
+      message:
+        "در حال حاضر امکان حذف وجود ندارد ، لطفاً بعداً تلاش نمایید",
     });
   } catch (error) {
     res.json({
