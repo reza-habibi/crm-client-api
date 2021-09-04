@@ -4,6 +4,8 @@ const {
   insertTicket,
   getTickets,
   getTicketById,
+  updateClientReply,
+  updateStatusClose,
 } = require("../model/ticket/TicketModel");
 
 const router = express.Router();
@@ -72,6 +74,53 @@ router.get("/:_id", userAuthorization, async (req, res) => {
     if (result.length) {
       return res.json({ status: "success", result });
     }
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: error.message,
+    });
+  }
+});
+
+router.put("/:_id", userAuthorization, async (req, res) => {
+  try {
+    const { message, sender } = req.body;
+    const { _id } = req.params;
+
+    const result = await updateClientReply({ _id, message, sender });
+    if (result._id) {
+      return res.json({ status: "success", message: "پیام شما ثبت شد" });
+    }
+    return res.json({
+      status: "error",
+      message:
+        "در حال حاضر امکان ثبت پیام شما وجود ندارد ، لطفاً بعداً تلاش نمایید",
+    });
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: error.message,
+    });
+  }
+});
+
+router.patch("/close-ticket/:_id", userAuthorization, async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const clientId = req.userId;
+
+    const result = await updateStatusClose({ _id, clientId });
+    if (result._id) {
+      return res.json({
+        status: "success",
+        message: "تیکت با موفقیت بسته شد.",
+      });
+    }
+    return res.json({
+      status: "error",
+      message:
+        "در حال حاضر امکان به روزرسانی وجود ندارد ، لطفاً بعداً تلاش نمایید",
+    });
   } catch (error) {
     res.json({
       status: "error",
