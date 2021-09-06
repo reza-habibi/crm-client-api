@@ -51,7 +51,7 @@ Content-Type: application/json
 
 ### Get refreshed token
 DELETE  http://localhost:4030/v1/user/logout
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImUxQGUuY29tIiwiaWF0IjoxNjMwNDcwMjgzLCJleHAiOjE2MzA0NzExODN9.S4_iMX4b4fLA8vOMLMCo4fqELWQZfmluhVLT9wPbUZs
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImUxQGUuY29tIiwiaWF0IjoxNjMwOTI1NzAwLCJleHAiOjE2MzA5MjY2MDB9.xyCPIc6Hk7KwA-fs-Z_yo61zJDMzfm1GBf0dV82-Y0A
 
 ### Send Ticket and save to db 
 POST http://localhost:4030/v1/ticket

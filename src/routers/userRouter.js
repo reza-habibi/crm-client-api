@@ -168,12 +168,23 @@ router.patch("/reset-password", updatePassValidation, async (req, res) => {
 
 router.delete("/logout", userAuthorization, async (req, res) => {
   const { authorization } = req.headers;
+  //this data coming form database
   const _id = req.userId;
 
+  // 2. delete accessJWT from redis database
   deleteJWT(authorization);
+
+  // 3. delete refreshJWT from mongodb
   const result = await storeUserRefreshJWT(_id, "");
 
-  res.json({ user: req.userId });
+  if (result._id) {
+    return res.json({ status: "success", message: "Loged out successfully" });
+  }
+
+  res.json({
+    status: "error",
+    message: "Unable to logg you out, plz try again later",
+  });
 });
 
 module.exports = router;
