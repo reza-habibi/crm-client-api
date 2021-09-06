@@ -31,9 +31,9 @@ router.get("/", userAuthorization, async (req, res) => {
   const _id = req.userId;
 
   const userProf = await getUserById(_id);
-  console.log(userProf);
+  const { name, email } = userProf;
 
-  res.json({ user: req.userId });
+  res.json({ user: { _id, name, email } });
 });
 
 // Create new user route
@@ -171,7 +171,7 @@ router.delete("/logout", userAuthorization, async (req, res) => {
   const _id = req.userId;
 
   deleteJWT(authorization);
-  const result =await storeUserRefreshJWT(_id, "");
+  const result = await storeUserRefreshJWT(_id, "");
 
   res.json({ user: req.userId });
 });

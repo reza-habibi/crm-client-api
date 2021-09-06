@@ -1,6 +1,10 @@
 const express = require("express");
 const { userAuthorization } = require("../middleware/authorizationMiddleware");
 const {
+  createNewTicketValidation,
+  replyTicketMessageValidation,
+} = require("../middleware/formValidationMiddleware");
+const {
   insertTicket,
   getTickets,
   getTicketById,
@@ -17,38 +21,43 @@ router.all("/", (req, res, next) => {
   next();
 });
 
-router.post("/", userAuthorization, async (req, res) => {
-  try {
-    const { subject, sender, message } = req.body;
-    const userId = req.userId;
+router.post(
+  "/",
+  createNewTicketValidation,
+  userAuthorization,
+  async (req, res) => {
+    try {
+      const { subject, sender, message } = req.body;
+      const userId = req.userId;
 
-    const ticketObj = {
-      clientId: userId,
-      subject,
-      conversations: [
-        {
-          sender,
-          message,
-        },
-      ],
-    };
+      const ticketObj = {
+        clientId: userId,
+        subject,
+        conversations: [
+          {
+            sender,
+            message,
+          },
+        ],
+      };
 
-    const result = await insertTicket(ticketObj);
-    if (result._id) {
-      return res.json({ status: "success", message: "تیکت جدیدی ایجاد شد" });
+      const result = await insertTicket(ticketObj);
+      if (result._id) {
+        return res.json({ status: "success", message: "تیکت جدیدی ایجاد شد" });
+      }
+
+      res.json({
+        status: "error",
+        message: "امکان ایجاد کردن تیکت نمی باشد ، لطفا بعداً تلاش نمایید.",
+      });
+    } catch (error) {
+      res.json({
+        status: "error",
+        message: error.message,
+      });
     }
-
-    res.json({
-      status: "error",
-      message: "امکان ایجاد کردن تیکت نمی باشد ، لطفا بعداً تلاش نمایید.",
-    });
-  } catch (error) {
-    res.json({
-      status: "error",
-      message: error.message,
-    });
   }
-});
+);
 
 router.get("/", userAuthorization, async (req, res) => {
   try {
@@ -83,27 +92,32 @@ router.get("/:_id", userAuthorization, async (req, res) => {
   }
 });
 
-router.put("/:_id", userAuthorization, async (req, res) => {
-  try {
-    const { message, sender } = req.body;
-    const { _id } = req.params;
+router.put(
+  "/:_id",
+  replyTicketMessageValidation,
+  userAuthorization,
+  async (req, res) => {
+    try {
+      const { message, sender } = req.body;
+      const { _id } = req.params;
 
-    const result = await updateClientReply({ _id, message, sender });
-    if (result._id) {
-      return res.json({ status: "success", message: "پیام شما ثبت شد" });
+      const result = await updateClientReply({ _id, message, sender });
+      if (result._id) {
+        return res.json({ status: "success", message: "پیام شما ثبت شد" });
+      }
+      return res.json({
+        status: "error",
+        message:
+          "در حال حاضر امکان ثبت پیام شما وجود ندارد ، لطفاً بعداً تلاش نمایید",
+      });
+    } catch (error) {
+      res.json({
+        status: "error",
+        message: error.message,
+      });
     }
-    return res.json({
-      status: "error",
-      message:
-        "در حال حاضر امکان ثبت پیام شما وجود ندارد ، لطفاً بعداً تلاش نمایید",
-    });
-  } catch (error) {
-    res.json({
-      status: "error",
-      message: error.message,
-    });
   }
-});
+);
 
 router.patch("/close-ticket/:_id", userAuthorization, async (req, res) => {
   try {
@@ -144,8 +158,7 @@ router.delete("/:_id", userAuthorization, async (req, res) => {
     }
     return res.json({
       status: "error",
-      message:
-        "در حال حاضر امکان حذف وجود ندارد ، لطفاً بعداً تلاش نمایید",
+      message: "در حال حاضر امکان حذف وجود ندارد ، لطفاً بعداً تلاش نمایید",
     });
   } catch (error) {
     res.json({

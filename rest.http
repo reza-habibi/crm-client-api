@@ -24,7 +24,7 @@ Content-Type: application/json
 
 ###user signin endpoint
 GET  http://localhost:4030/v1/user
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImUxQGUuY29tIiwiaWF0IjoxNjMwNzM1MDg1LCJleHAiOjE2MzA3MzU5ODV9.GxhxLujthq7k-oAPPdpJvszzDxq4Gxenb6DGb1YEA5E
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImUxQGUuY29tIiwiaWF0IjoxNjMwOTE0MTg1LCJleHAiOjE2MzA5MTUwODV9.HKxmAIrm2BCxEyw-VhKgLVPly5eUEcQhXQ-PlMIg7Pw
 
 ### Get refreshed token
 GET http://localhost:4030/v1/tokens
