@@ -24,11 +24,11 @@ Content-Type: application/json
 
 ###user signin endpoint
 GET  http://localhost:4030/v1/user
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImUxQGUuY29tIiwiaWF0IjoxNjMwOTE0MTg1LCJleHAiOjE2MzA5MTUwODV9.HKxmAIrm2BCxEyw-VhKgLVPly5eUEcQhXQ-PlMIg7Pw
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImUxQGUuY29tIiwiaWF0IjoxNjMxMDc4MDU2LCJleHAiOjE2MzEwNzg5NTZ9.3juaom90ZhowiU1ZMF2dBrI1F8svjaWsNULUNSijj-M
 
 ### Get refreshed token
 GET http://localhost:4030/v1/tokens
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImUxQGUuY29tIiwiaWF0IjoxNjMwMzE4Nzc1LCJleHAiOjE2MzI5MTA3NzV9.UDzHjG8tXrLGXODlQOdP7U24FaMJDQ3k7ridI2dEx5k
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImUxQGUuY29tIiwiaWF0IjoxNjMxMDc2OTA3LCJleHAiOjE2MzM2Njg5MDd9.NMzH2SCsEXrC5d1QS0sMTBA6w-QHULQdtzplo9GlKIc
 
 ###user reset passsword request endpoint
 POST http://localhost:4030/v1/user/reset-password

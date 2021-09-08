@@ -100,7 +100,8 @@ router.put(
     try {
       const { message, sender } = req.body;
       const { _id } = req.params;
-
+      console.log(_id);
+      console.log(req.body);
       const result = await updateClientReply({ _id, message, sender });
       if (result._id) {
         return res.json({ status: "success", message: "پیام شما ثبت شد" });

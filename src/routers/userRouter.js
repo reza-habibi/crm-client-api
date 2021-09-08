@@ -8,7 +8,7 @@ const {
   storeUserRefreshJWT,
 } = require("../model/user/userModel.js");
 const { hashPassword, comparePassword } = require("../helper/bcryptHelper.js");
-const { CreateAccessJWT, CreateRefreshJWT } = require("../helper/jwtHelper.js");
+const { createAccessJWT, createRefreshJWT } = require("../helper/jwtHelper.js");
 const { userAuthorization } = require("../middleware/authorizationMiddleware");
 const {
   setResetPassPin,
@@ -91,8 +91,8 @@ router.post("/login", async (req, res) => {
     });
   }
 
-  const accessJWT = await CreateAccessJWT(user.email, `${user._id}`);
-  const refreshJWT = await CreateRefreshJWT(user.email, user._id);
+	const accessJWT = await createAccessJWT(user.email, `${user._id}`);
+  const refreshJWT = await createRefreshJWT(user.email, user._id);
 
   res.json({
     status: "success",
@@ -183,7 +183,7 @@ router.delete("/logout", userAuthorization, async (req, res) => {
 
   res.json({
     status: "error",
-    message: "Unable to logg you out, plz try again later",
+    message: "Unable to log you out, plz try again later",
   });
 });
 
