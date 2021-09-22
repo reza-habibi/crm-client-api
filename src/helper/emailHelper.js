@@ -24,7 +24,7 @@ const send = (mailInfo) => {
   });
 };
 
-const emailProcessor = ({ email, pin, type }) => {
+const emailProcessor = ({ email, pin, type , verificationLink }) => {
   let mailInfo = {};
 
   switch (type) {
@@ -56,6 +56,22 @@ const emailProcessor = ({ email, pin, type }) => {
 
       send(mailInfo);
       break;
+
+    case "new_user_confirmation_required":
+      mailInfo = {
+        from: '"Rez CRM Company 👻" <mitchell.runolfsson21@ethereal.email>', // sender address
+        to: email, // list of receivers
+        subject: "لطفاً اکانت خود را تائید نمایید", // Subject line
+        text: "لطفاً بر روی لینک کلیک نمایید تا اکانت شما فعال گردد .", // plain text body
+        html: `<p>با سلام و احترام <br/>
+        لطفاً بر روی لینک کلیک نمایید تا اکانت شما فعال گردد .</p>
+        <p>${verificationLink}</p>
+        `, // html body
+      };
+
+      send(mailInfo);
+      break;
+
     default:
       break;
   }

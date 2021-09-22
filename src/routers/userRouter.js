@@ -19,6 +19,7 @@ const { emailProcessor } = require("../helper/emailHelper.js");
 const {
   resetPassReqValidation,
   updatePassValidation,
+  newUserValidation
 } = require("../middleware/formValidationMiddleware.js");
 const { deleteJWT } = require("../helper/redisHelper.js");
 router.all("/", (req, res, next) => {
@@ -37,7 +38,7 @@ router.get("/", userAuthorization, async (req, res) => {
 });
 
 // Create new user route
-router.post("/", async (req, res) => {
+router.post("/",newUserValidation, async (req, res) => {
   const { name, company, address, phone, email, password } = req.body;
   try {
     const hashedPass = await hashPassword(password);
@@ -52,11 +53,26 @@ router.post("/", async (req, res) => {
     };
 
     const result = await insertUser(newUserObj);
-    res.json({ message: " حساب کاربری جدید ساخته شد", result });
+    res.json({
+      status: "success",
+      message: " حساب کاربری جدید ساخته شد",
+      result,
+    });
+
+    await emailProcessor({
+      email,
+      type: "new_user_confirmation_required",
+      verificationLink:"http://localhost:3000/verification"+result._id
+    });
     console.log(result);
   } catch (error) {
     console.log(error);
-    res.json({ status: "error", message: error.message });
+    let message =
+      "در حال حاضر امکان ساخت اکان وجود ندارد ، لطفاً مجدداً تلاش نمایید یا با پشتیبانی تماس بگیرید";
+    if (error.message.includes("duplicate key error collection")) {
+      message = "در حال حاضر این ایمیل دارای اکانت می باشد";
+    }
+    res.json({ status: "error", message });
   }
 });
 
@@ -91,7 +107,7 @@ router.post("/login", async (req, res) => {
     });
   }
 
-	const accessJWT = await createAccessJWT(user.email, `${user._id}`);
+  const accessJWT = await createAccessJWT(user.email, `${user._id}`);
   const refreshJWT = await createRefreshJWT(user.email, user._id);
 
   res.json({

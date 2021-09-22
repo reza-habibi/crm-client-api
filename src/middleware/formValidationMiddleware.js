@@ -6,11 +6,10 @@ const email = Joi.string().email({
 });
 
 const pin = Joi.number().min(1000000).max(9999999).required();
-const phone = Joi.number().min(09354535833).max(989354535833).required();
+const phone = Joi.number().min(09000000000).max(989999999999).required();
 const newPassword = Joi.string().min(3).max(30).required();
 const shortStr = Joi.string().min(2).max(100);
 const longStr = Joi.string().min(3).max(1000);
-const dt = Joi.date();
 const resetPassReqValidation = (req, res, next) => {
   const schema = Joi.object({ email });
 
@@ -54,7 +53,7 @@ const createNewTicketValidation = (req, res, next) => {
     subject: shortStr.required(),
     sender: shortStr.required(),
     message: longStr.required(),
-    issueDate:dt.required()
+    issueDate:Joi.string().required()
   });
   const value = schema.validate(req.body);
 
